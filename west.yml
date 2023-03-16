@@ -33,6 +33,8 @@ manifest:
       url-base: https://github.com/memfault
     - name: ant-nrfconnect
       url-base: https://github.com/ant-nrfconnect
+    - name: openthread-main
+      url-base: https://github.com/openthread
 
   # If not otherwise specified, the projects below should be obtained
   # from the ncs remote.
@@ -194,9 +196,10 @@ manifest:
           upstream-sha: 1be6ca7253133a21a1e9fe0fbb4656e17d63a936
           compare-by-default: false
     - name: openthread
-      repo-path: sdk-openthread
+      remote: openthread-main
+      repo-path: openthread
       path: modules/lib/openthread
-      revision: 2d0d9bef888d0bbad5719f8fe7ef54f2b5a6d075
+      revision: pull/8743/head
       userdata:
         ncs:
           upstream-url: https://github.com/openthread/openthread
