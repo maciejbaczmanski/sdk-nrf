@@ -7,6 +7,9 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
+#include <openthread/thread.h>
+#include <zephyr/net/openthread.h>
+
 #if defined(CONFIG_CLI_SAMPLE_MULTIPROTOCOL)
 #include "ble.h"
 #endif
@@ -29,6 +32,53 @@ LOG_MODULE_REGISTER(cli_sample, CONFIG_OT_COMMAND_LINE_INTERFACE_LOG_LEVEL);
 	"For the full commands list refer to the OpenThread CLI " \
 	"documentation at:\n\r" \
 	"https://github.com/openthread/openthread/blob/master/src/cli/README.md\n\r"
+
+
+
+static void on_commissioner_state_changed(otCommissionerState aState, void *aContext)
+{
+	LOG_INF("Commissioner started");
+	if(aState == OT_COMMISSIONER_STATE_ACTIVE)
+	{
+		otCommissionerAddJoiner(openthread_get_default_instance(), NULL, "FEDCBA9876543210",2000);
+	}
+}
+
+static void on_thread_state_changed(otChangedFlags flags, struct openthread_context *ot_context,
+				    void *user_data)
+{
+	if (flags & OT_CHANGED_THREAD_ROLE) {
+		otDeviceRole ot_role = otThreadGetDeviceRole(ot_context->instance);
+		if (ot_role != OT_DEVICE_ROLE_DETACHED && ot_role != OT_DEVICE_ROLE_DISABLED) {
+			otCommissionerStart(ot_context->instance, &on_commissioner_state_changed, NULL, NULL);
+		}
+	}
+}
+
+static struct openthread_state_changed_cb ot_state_chaged_cb = {
+	.state_changed_cb = on_thread_state_changed
+};
+
+int ot_initialization(void)
+{
+	struct openthread_context *context = openthread_get_default_context();
+
+	otInstance *instance = openthread_get_default_instance();
+
+	/* LOG_INF("Updating thread parameters"); */
+	// ot_setNetworkConfiguration(instance);
+	/* LOG_INF("Enabling thread"); */
+	otError err = openthread_start(context); /* 'ifconfig up && thread start' */
+
+	if (err != OT_ERROR_NONE) {
+		LOG_ERR("Starting openthread: %d (%s)", err, otThreadErrorToString(err));
+	}
+	otDeviceRole current_role = otThreadGetDeviceRole(instance);
+
+	LOG_INF("Current role of Thread device: %s", otThreadDeviceRoleToString(current_role));
+	return 0;
+}
+
 
 int main(void)
 {
@@ -77,6 +127,9 @@ int main(void)
 #if defined(CONFIG_CLI_SAMPLE_LOW_POWER)
 	low_power_enable();
 #endif
+
+	ot_initialization();
+	openthread_state_changed_cb_register(openthread_get_default_context(), &ot_state_chaged_cb);
 
 	return 0;
 }
