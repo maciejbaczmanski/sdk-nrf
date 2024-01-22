@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #include "ot_utils.h"
+#include "zperf_utils.h"
 
 #include "openthread/ping_sender.h"
 #include <zephyr/logging/log.h>
@@ -411,6 +412,8 @@ void ot_start_zperf_test_send(const char *peer_addr, uint32_t duration_sec,
 			CONFIG_ZPERF_THREAD_INTERFACE);
 	}
 	shell_execute_cmd(shell, cmd);
+#else
+	zperf_upload(peer_addr, duration_sec, packet_size_bytes, rate_bps, is_ot_zperf_udp);
 #endif
 }
 
@@ -425,6 +428,9 @@ void ot_start_zperf_test_recv(bool is_ot_zperf_udp)
 		/* PENDING .. to be updated correctly (should add port info?) */
 		shell_execute_cmd(shell, "zperf tcp download");
 	}
+
+# else
+	zperf_download(is_ot_zperf_udp);
 #endif
 }
 
