@@ -277,9 +277,9 @@ config NET_RX_STACK_SIZE
 	int
 	default 300
 
-config NET_TX_STACK_SIZE
-	int
-	default 300
+# config NET_TX_STACK_SIZE
+# 	int
+# 	default 300
 
 endif # OPENTHREAD_COPROCESSOR_RCP
 
