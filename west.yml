@@ -39,6 +39,8 @@ manifest:
       url-base: https://github.com/boschsensortec
     - name: eembc
       url-base: https://github.com/eembc
+    - name: maciejbaczmanski
+      url-base: https://github.com/maciejbaczmanski
 
   # If not otherwise specified, the projects below should be obtained
   # from the ncs remote.
@@ -69,7 +71,8 @@ manifest:
     # https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/zephyr/guides/modules.html
     - name: zephyr
       repo-path: sdk-zephyr
-      revision: 7f8d857bf1f57b07e832d52263beaa23c91fef24
+      revision: ot_radio_state_machine_ncs_patch
+      remote: maciejbaczmanski
       import:
         # In addition to the zephyr repository itself, NCS also
         # imports the contents of zephyr/west.yml at the above
@@ -235,7 +238,8 @@ manifest:
     - name: openthread
       repo-path: sdk-openthread
       path: modules/lib/openthread
-      revision: ncs-thread-reference-20241002
+      revision: diags_fixes_ncs_patch
+      remote: maciejbaczmanski
       userdata:
         ncs:
           upstream-url: https://github.com/openthread/openthread
