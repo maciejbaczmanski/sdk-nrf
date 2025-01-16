@@ -39,6 +39,8 @@ manifest:
       url-base: https://github.com/boschsensortec
     - name: eembc
       url-base: https://github.com/eembc
+    - name: maciejbaczmanski
+      url-base: https://github.com/maciejbaczmanski
 
   # If not otherwise specified, the projects below should be obtained
   # from the ncs remote.
@@ -69,7 +71,8 @@ manifest:
     # https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/zephyr/guides/modules.html
     - name: zephyr
       repo-path: sdk-zephyr
-      revision: 954583a58b959f33125c561ad1ea367ccc1830f7
+      revision: matter_tcat
+      remote: maciejbaczmanski
       import:
         # In addition to the zephyr repository itself, NCS also
         # imports the contents of zephyr/west.yml at the above
@@ -158,8 +161,9 @@ manifest:
       revision: 3da9313e64806d352c519e3205e81cf959067588
     - name: matter
       repo-path: sdk-connectedhomeip
+      remote: maciejbaczmanski
       path: modules/lib/matter
-      revision: f87a50ce9cc51442adb5f5271b9214ce9a90f9ea
+      revision: matter_tcat
       west-commands: scripts/west/west-commands.yml
       submodules:
         - name: nlio
